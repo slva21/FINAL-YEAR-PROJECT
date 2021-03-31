@@ -67,48 +67,6 @@ void setup()
         delay(1000);
     }
 
-    // lcd.clear();
-    // lcd.setCursor(0, 0);
-    // lcd.print("Finding ESP8266...");
-    // delay(1000);
-    // lcd.clear();
-
-    // if (sendCommand("AT", 5, "OK"))
-    // {
-
-    //     lcd.setCursor(2, 0);
-    //     lcd.print("ESP8266 FOUND!");
-    //     delay(500);
-    //     lcd.setCursor(0, 0);
-    //     sendCommand("AT+CWMODE=3", 5, "OK");
-    //     lcd.clear();
-    //     lcd.print("Connecting to:");
-    //     lcd.setCursor(0, 1);
-    //     lcd.print(AP);
-    //     delay(500);
-    // }
-    // else
-    // {
-    //     lcd.setCursor(0, 0);
-    //     lcd.print("ESP8266 NOT FOUND!");
-    //     delay(1000);
-    // }
-
-    // if (sendCommand("AT+CWJAP=\"" + AP + "\",\"" + PASS + "\"", 20, "OK"))
-    // {
-    //     lcd.clear();
-    //     lcd.setCursor(1, 0);
-    //     lcd.print("WIFI Connected!");
-    //     delay(1000);
-    // }
-    // else
-    // {
-    //     lcd.clear();
-    //     lcd.setCursor(0, 0);
-    //     lcd.print("CONNECTION FAILED"); //try resarting it..
-    //     delay(1000);
-    // }
-
     lcd.clear();
     lcd.setCursor(2, 0);
     lcd.print("Safe Flight!");

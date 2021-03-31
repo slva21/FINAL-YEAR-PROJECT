@@ -28,6 +28,8 @@ float Detection::ultrasonic()
 
     distance_m = distance_cm * 0.01;
 
+    Serial.println(distance_m);
+
     return distance_m;
 }
 
@@ -124,4 +126,3 @@ void change_clear_state()
 {
     clear = false;
 }
-

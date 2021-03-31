@@ -210,7 +210,7 @@ void Avoidance::back_state_disturbed()
     front_state = checkScore(); //set state..
 
     //set the state for any side that hasnt been checked..
-    if (left_side_state == 0)
+    if (right_side_state == 0)
     {                                    //if the left state hasnt been checked
         myservo.write(right);            //turn the servo left
         delay(200);                      //wait
@@ -226,7 +226,7 @@ void Avoidance::back_state_disturbed()
         } //else
     }
 
-    if (right_side_state == 0)
+    if (left_side_state == 0)
     {                                     //if the left state hasnt been checked
         myservo.write(left);              //turn the servo left
         delay(200);                       //wait
@@ -297,12 +297,12 @@ void Avoidance::avoidance()
     int statusSensor7 = digitalRead(IRSensor7);
     //this fuction will execute the appropriate avoidance strategy
 
-    if (statusSensor5 == 0)
-    {
+    // if (statusSensor5 == 0)
+    // {
 
-        side_state_disturbed(right, left);
-        return;
-    }
+    //     side_state_disturbed(right, left);
+    //     return;
+    // }
 
     // if (statusSensor7 == 0 || statusSensor3 == 0)
     // {

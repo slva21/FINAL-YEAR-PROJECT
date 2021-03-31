@@ -1,0 +1,3 @@
+##This program is for the ESP WIFI controller and the code must be uploaded to it directly
+**NOT** the conventional arduino way.
+--The board type must also be set to the ESP board

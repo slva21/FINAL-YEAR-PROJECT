@@ -4,8 +4,15 @@ noDelay interval_gps(5000);
 
 void setup()
 {
-  pitchPID.SetMode(AUTOMATIC);
-  rollPID.SetMode(AUTOMATIC);
+  controll_roll_left.SetMode(AUTOMATIC);
+  controll_roll_left.SetOutputLimits(90.0, 255.0);
+  controll_roll_right.SetMode(AUTOMATIC);
+  controll_roll_right.SetOutputLimits(90.0, 255.0);
+
+  controll_pitch_left.SetMode(AUTOMATIC);
+  controll_pitch_left.SetOutputLimits(90.0, 255.0);
+  controll_pitch_right.SetMode(AUTOMATIC);
+  controll_pitch_right.SetOutputLimits(90.0, 255.0);
 
   Serial.begin(9600);
   Serial1.begin(9600); //for gps
@@ -49,16 +56,7 @@ void setup()
   pinMode(INA4, OUTPUT);
   pinMode(INB4, OUTPUT);
 
-  digitalWrite(INA1, LOW);
-  digitalWrite(INB1, LOW);
-  digitalWrite(INA2, LOW);
-  digitalWrite(INB2, LOW);
-  digitalWrite(INA3, LOW);
-  digitalWrite(INB3, LOW);
-  digitalWrite(INA4, LOW);
-  digitalWrite(INB4, LOW);
-
-  attachInterrupt(digitalPinToInterrupt(2), change_clear_state, FALLING);
+  //attachInterrupt(digitalPinToInterrupt(2), change_clear_state, FALLING);
 
   radio.transmit_any("Initialized!");
 }
@@ -66,21 +64,73 @@ void setup()
 void loop()
 {
 
-  while (clear)
-  {
-    positioning_sub_system();
+  pid_pitch_control.autolevel(imu.get_pitch_angle());
+  pid_roll_control.autolevel(imu.get_roll_angle());
 
-    double roll = imu.get_roll_angle();
-    double pitch = imu.get_pitch_angle();
+  Serial << pid_pitch_control.left_output << "," << pid_pitch_control.right_output << ","
+         << imu.get_pitch_angle() << endl;
 
-    radio.transmit_pitch(convert_double_to_string_with_len(pitch, 7).c_str());
-    radio.transmit_roll(convert_double_to_string_with_len(roll, 8).c_str());
-  }
+  myMotor.pid_pitch_control(pid_pitch_control.left_output, pid_pitch_control.right_output);
 
-  avoid.avoidance();
-  radio.transmit_warning();
+  //myMotor.pid_roll_control(pid_roll_control.left_output, pid_roll_control.left_output);
+  // transmitRoll.sendData(imu.get_roll_angle(), 1);
+  // transmitPitch.sendData(imu.get_pitch_angle(), 1);
+  //Serial << detect.ultrasonic() << endl;
+  //myMotor.set_motor_4(myMotor.upVector);
+  //myMotor.set_motor_2(myMotor.upVector);
+  //myMotor.set_motor_3(myMotor.upVector);
+  //myMotor.set_motor_1(myMotor.upVector);
 
-  clear = true;
+  //myMotor.set_motor_4(myMotor.downVector);
+  // myMotor.command_drone_hover();
+  //digitalWrite(ledRed, HIGH);
+  //digitalWrite(ledBlue, HIGH);
+  //digitalWrite(ledGreen, HIGH);
+  //digitalWrite(ledYellow, HIGH);
+  // while (clear)
+  // {
+  //   positioning_sub_system();
+
+  //   double roll = imu.get_roll_angle();
+  //   double pitch = imu.get_pitch_angle();
+
+  //   radio.transmit_pitch(convert_double_to_string_with_len(pitch, 7).c_str());
+  //   radio.transmit_roll(convert_double_to_string_with_len(roll, 8).c_str());
+  // }
+
+  // avoid.avoidance();
+  // radio.transmit_warning();
+
+  // clear = true;
+
+  // if (digitalRead(IRSensor1) == 0)
+  // {
+  //   Serial << "1" << endl;
+  // }
+  // if (digitalRead(IRSensor2) == 0)
+  // {
+  //   Serial << "2" << endl;
+  // }
+  // if (digitalRead(IRSensor3) == 0)
+  // {
+  //   Serial << "3" << endl;
+  // }
+  // if (digitalRead(IRSensor4) == 0)
+  // {
+  //   Serial << "4" << endl;
+  // }
+  // if (digitalRead(IRSensor5) == 0)
+  // {
+  //   Serial << "5" << endl;
+  // }
+  // if (digitalRead(IRSensor6) == 0)
+  // {
+  //   Serial << "6" << endl;
+  // }
+  // if (digitalRead(IRSensor7) == 0)
+  // {
+  //   Serial << "7" << endl;
+  // }
 }
 
 // //front = 5,4

@@ -81,3 +81,19 @@ void Motors::command_drone_foward()
     set_motor_3(hover);
     set_motor_4(upVector);
 }
+
+void Motors::pid_roll_control(const int &left_output, const int &right_output)
+{
+    set_motor_1(left_output);
+    set_motor_2(left_output);
+    set_motor_3(right_output);
+    set_motor_4(right_output);
+}
+
+void Motors::pid_pitch_control(const int &left_output, const int &right_output)
+{
+    set_motor_1(left_output);
+    set_motor_4(left_output);
+    set_motor_2(right_output);
+    set_motor_3(right_output);
+}

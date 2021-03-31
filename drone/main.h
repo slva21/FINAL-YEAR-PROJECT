@@ -17,9 +17,11 @@
 #include "avoidance.h"
 #include "kalman.h"
 #include <Streaming.h>
-#include "pid.h"
+#include "pid_roll.h"
+#include "pid_pitch.h"
 #include "rf.h"
 #include "PID_v1.h"
+#include "dataframe.h"
 
 //****object declerations****
 RH_ASK rf_driver; // Create Amplitude Shift Keying Object
@@ -32,20 +34,30 @@ Avoidance avoid;
 Kalman kalmanX; // Create the Kalman instances
 Kalman kalmanY;
 RF radio;
-AutoLevel autoLevel;
+PID_Roll_Control pid_roll_control;
+PID_Pitch_Control pid_pitch_control;
+
 //scl= blue
 //sda = orange
 
-PID rollPID(&autoLevel.roll, &autoLevel.pid_roll_pwm_output, &autoLevel.Setpoint, autoLevel.Kp, autoLevel.Ki, autoLevel.Kd, DIRECT);
+//pid control for roll axis.
+PID controll_roll_left(&pid_roll_control.roll, &pid_roll_control.left_output, &pid_roll_control.Setpoint, pid_roll_control.Kp, pid_roll_control.Ki, pid_roll_control.Kd, DIRECT);
 
-PID pitchPID(&autoLevel.pitch, &autoLevel.pid_pitch_pwm_output, &autoLevel.Setpoint, autoLevel.Kp, autoLevel.Ki, autoLevel.Kd, DIRECT);
+PID controll_roll_right(&pid_roll_control.roll, &pid_roll_control.right_output, &pid_roll_control.Setpoint, pid_roll_control.Kp, pid_roll_control.Ki, pid_roll_control.Kd, REVERSE);
 
+//pid control for pitch axis.
+PID controll_pitch_left(&pid_pitch_control.pitch, &pid_pitch_control.left_output, &pid_pitch_control.Setpoint, pid_pitch_control.Kp, pid_pitch_control.Ki, pid_pitch_control.Kd, DIRECT);
+
+PID controll_pitch_right(&pid_pitch_control.pitch, &pid_pitch_control.right_output, &pid_pitch_control.Setpoint, pid_pitch_control.Kp, pid_pitch_control.Ki, pid_pitch_control.Kd, REVERSE);
+
+DataFrame transmitPitch(20, 2); //20 is for imu and 1 is for pitch data type
+DataFrame transmitRoll(20, 1);  //20 is for imu and 2 is for roll data type
 //**defines*****
 
 //Ultrasonic setup.................
-#define echoPin 23 // attach pin D12 Arduino to pin Echo of HC-SR04
-#define trigPin 25 //attach pin D13 Arduino to pin Trig of HC-SR04
-#define buzzer 45  //black
+const int echoPin = 23; // attach pin D12 Arduino to pin Echo of HC-SR04
+const int trigPin = 25; //attach pin D13 Arduino to pin Trig of HC-SR04
+const int buzzer = 45;  //black
 
 int IRSensor1 = 36; // green to black
 int IRSensor2 = 38; //white
@@ -88,7 +100,9 @@ int INA2 = 7;
 int INA3 = 6;
 int INB3 = 5;
 int INA4 = 4;
-int INB4 = 7;
+int INB4 = 3;
+
+//pin 12 for radio
 
 const int left = 180;
 const int right = 10;
