@@ -23,7 +23,7 @@ public:
     void command_drone_foward();
 
 public:
-    void pid_roll_control(const int &left_output, const int &right_output);
+    void roll_control(const int &desired_angle);
 
-    void pid_pitch_control(const int &left_output, const int &right_output);
+    void pitch_control(const int &desired_angle);
 };

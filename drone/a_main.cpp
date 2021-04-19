@@ -72,7 +72,7 @@ void loop()
 
   myMotor.pid_pitch_control(pid_pitch_control.left_output, pid_pitch_control.right_output);
 
-  //myMotor.pid_roll_control(pid_roll_control.left_output, pid_roll_control.left_output);
+  myMotor.pid_roll_control(pid_roll_control.left_output, pid_roll_control.right_output);
   // transmitRoll.sendData(imu.get_roll_angle(), 1);
   // transmitPitch.sendData(imu.get_pitch_angle(), 1);
   //Serial << detect.ultrasonic() << endl;

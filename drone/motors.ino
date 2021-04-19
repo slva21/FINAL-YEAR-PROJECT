@@ -82,18 +82,34 @@ void Motors::command_drone_foward()
     set_motor_4(upVector);
 }
 
-void Motors::pid_roll_control(const int &left_output, const int &right_output)
+void Motors::roll_control(const int &desired_angle)
 {
-    set_motor_1(left_output);
-    set_motor_2(left_output);
-    set_motor_3(right_output);
-    set_motor_4(right_output);
+    pid_roll_control.Setpoint = desired_angle; //set the PID desired roll angle
+    manouverTime.start();                      //start a 3 second timer
+
+    while (!manouverTime) //run for at least 3 seconds
+    {
+        pid_roll_control.autolevel(imu.get_roll_angle()); //compute the pwm outputs based on the current roll angle
+
+        set_motor_1(pid_roll_control.left_output);
+        set_motor_2(pid_roll_control.left_output);
+        set_motor_3(pid_roll_control.right_output);
+        set_motor_4(pid_roll_control.right_output);
+    }
 }
 
-void Motors::pid_pitch_control(const int &left_output, const int &right_output)
+void Motors::pitch_control(const int &desired_angle)
 {
-    set_motor_1(left_output);
-    set_motor_4(left_output);
-    set_motor_2(right_output);
-    set_motor_3(right_output);
+    pid_pitch_control.Setpoint = desired_angle; //set the PID desired roll angle
+    manouverTime.start();
+
+    while (!manouverTime) //run for at least 3 seconds
+    {
+        pid_pitch_control.autolevel(imu.get_pitch_angle()); //compute the pwm values based on the current roll angle
+
+        set_motor_1(pid_pitch_control.left_output);
+        set_motor_4(pid_pitch_control.left_output);
+        set_motor_2(pid_pitch_control.right_output);
+        set_motor_3(pid_pitch_control.right_output);
+    }
 }

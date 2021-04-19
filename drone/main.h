@@ -36,6 +36,11 @@ Kalman kalmanY;
 RF radio;
 PID_Roll_Control pid_roll_control;
 PID_Pitch_Control pid_pitch_control;
+noDelay manouverTime(3000); //each manouver will be run for 3 seconds
+
+#define POSITIVE_BANK_ANGLE = 10;
+#define NEGATIVE_BANK_ANGLE = -10;
+#define LEVEL_ANGLE = 0;
 
 //scl= blue
 //sda = orange

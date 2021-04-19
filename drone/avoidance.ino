@@ -142,19 +142,20 @@ void Avoidance::side_state_disturbed(int disturbed_side, int opposite_side)
         case left:
             while (front_state < 4)
             {
-                myMotor.command_drone_roll_right(); //command the motors to roll right until the front is clear
+                myMotor.roll_control(POSITIVE_BANK_ANGLE); //command the PID to roll right by 10 degrees
+
                 front_state = checkScore();
             }
-            myMotor.command_drone_hover();
+            myMotor.roll_control(LEVEL_ANGLE); //bring the drone roll back to level.
             break;
         case right:
             while (front_state < 4)
             {
-                myMotor.command_drone_roll_left(); //command the motors to roll right until the front is clear
+                myMotor.roll_control(NEGATIVE_BANK_ANGLE); //command the motors to roll LEFT until the front is clear
                 front_state = checkScore();
             }
 
-            myMotor.command_drone_hover();
+            myMotor.roll_control(LEVEL_ANGLE); //bring the drone roll back to level.
             break;
 
         default:
